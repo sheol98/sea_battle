@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Sea Batlle</title>
+  </head>
+  <body>
+    <script>
+      // Задача 3. Морський бій. Випадковим чином на двовимірному полі розміром 6*6 розташовується 5 кораблів.
+      // Користувач стріляє вказуючи координати. Гра продовжується поки не потоплено усі кораблі або у користувача не
+      // закінчаться снаряди.
+
+      function getArr(rowQ, columnsQ) {
+        let arr = [];
+        for (let i = 0; i < rowQ; i++) {
+          let columns = new Array(columnsQ).fill(0);
+          arr.push(columns);
+        }
+        return arr;
+      }
+      function getRandomPositionShip(shipCount, table, min, max) {
+        let arr = table;
+        do {
+          let randomForRow = min + Math.floor(Math.random() * (max - min + 1));
+          let randomForColumn =
+            min + Math.floor(Math.random() * (max - min + 1));
+          if (arr[randomForRow][randomForColumn] === 0) {
+            arr[randomForRow].splice([randomForColumn], 1, 1);
+            shipCount--;
+          }
+        } while (shipCount > 0);
+        return arr;
+      }
+
+      let shipCount = 5;
+      let table = getArr(6, 6);
+      let arrWithShip = getRandomPositionShip(shipCount, table, 0, 5);
+
+      let testQ = 10;
+      alert(`Морський бій. Випадковим чином на двовимірному полі розміром 6*6 розташовується 5 кораблів.\n 
+Користувач стріляє вказуючи координати. Гра продовжується поки не потоплено усі кораблі або у користувача не 
+закінчаться снаряди(${testQ} шт.).`);
+      lable: do {
+        alert(`У вас ${testQ} спроб щоб потопити ${shipCount} кораблів`);
+        let userNumForRow = parseInt(
+          prompt("Зробіть вибір по осі Y від 1 до 6")
+        );
+        if (userNumForRow < 1 || userNumForRow > 6) {
+          alert("Введіть значення від 1 до 6");
+          continue lable;
+        }
+        let userNumForColumn = parseInt(
+          prompt("Зробіть вибір по осі X від 1 до 6")
+        );
+
+        if (userNumForColumn < 1 || userNumForColumn > 6) {
+          alert("Введіть значення від 1 до 6");
+          continue lable;
+        }
+
+        if (arrWithShip[userNumForRow - 1][userNumForColumn - 1] === 1) {
+          alert("Вітаємо ви потопили корабель");
+          arrWithShip[userNumForRow - 1].splice([userNumForColumn - 1], 1, 0);
+          shipCount--;
+        } else alert("Ви промахнулися");
+        testQ--;
+        if (shipCount < 1) alert(`Вітаємо, всі кораблі знищенно`);
+        if (testQ < 1) {
+          alert(`Ви програли =(`);
+          document.write(`
+					<img class="alena" src="alena.jpg" >
+					`);
+        }
+      } while (shipCount > 0 && testQ > 0);
+      console.log(arrWithShip);
+    </script>
+  </body>
+</html>
